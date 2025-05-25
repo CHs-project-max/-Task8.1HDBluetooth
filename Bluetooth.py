@@ -3,9 +3,7 @@ import struct
 import RPi.GPIO as io
 import time
 from bleak import BleakClient, BleakScanner
-
-ARDUINO_MAC = "E0:5A:1B:7A:35:4E"  # <- Your Arduino
-CHAR_UUID = "19B10001-E8F2-537E-4F6C-D104768A1214"  # Make sure this matches your Arduino sketch
+CHAR_UUID = "19B10001-E8F2-537E-4F6C-D104768A1214"  
 
 TRIG = 4
 ECHO = 11
@@ -22,7 +20,7 @@ def get_distance():
     while io.input(ECHO) == 1:
         pulse_end = time.time()
     pulse_duration = pulse_end - pulse_start
-    distance = pulse_duration * 17150  # Speed of sound in cm/s
+    distance = pulse_duration * 17150 
     return distance
 
 async def run():
@@ -33,8 +31,8 @@ async def run():
     print("device found")
     async with BleakClient(device, timeout = 30) as client:
         print(f"Connected to {ARDUINO_MAC}")
+        #get distance and send to arduino
         while client.is_connected:
-        # Example float value to send (adjust as needed)
             distance = get_distance()
             float_bytes = struct.pack('<f', distance)
             print(f"Sending float: {distance}")
